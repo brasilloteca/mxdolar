@@ -1,194 +1,241 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MX$ - Calculadora de Apostas</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    h1 { text-align: center; font-size: 3em; margin-bottom: 20px; }
-    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-    .field { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-    .field label { width: 150px; }
-    input[type="text"], input[type="number"] { padding: 5px; width: 150px; }
-    button { padding: 10px 20px; margin-top: 10px; cursor: pointer; border-radius: 5px; border: none; background: #007bff; color: #fff; }
-    button:hover { background: #0056b3; }
-    .resultado { margin-top: 20px; padding: 10px; background: #e9ecef; border-radius: 5px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
-    .ganho { background-color: #c8f7c5; }
-    .perda { background-color: #f7c5c5; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MX$ - Calculadora de Apostas</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    color: #222;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 3em;
+    color: #009879;
+  }
+  .container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  input[type="number"], input[type="text"] {
+    width: 150px;
+    padding: 6px;
+    margin: 4px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  button {
+    background: #009879;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button:hover {
+    background: #007b63;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  tr.ganho {
+    background-color: #c8f7c5;
+  }
+  tr.perda {
+    background-color: #f7c5c5;
+  }
+</style>
 </head>
 <body>
-  <h1>MX$</h1>
-  <div class="container">
-    
-    <!-- Saldo -->
-    <div class="field">
-      <label>Saldo inicial:</label>
-      <input type="number" id="saldoInicial" value="0">
-      <label>Saldo atual:</label>
-      <input type="number" id="saldoAtual" value="0" readonly>
-    </div>
 
-    <!-- Nomes dos times -->
-    <div class="field">
-      <label>Time 1:</label>
-      <input type="text" id="time1">
-      <label>Time 2:</label>
-      <input type="text" id="time2">
-    </div>
-
-    <!-- Odds -->
-    <div class="field">
-      <label>Odd Time 1:</label>
-      <input type="number" step="0.01" id="odd1">
-      <label>Odd Time 2:</label>
-      <input type="number" step="0.01" id="odd2">
-    </div>
-
-    <!-- Valor total a apostar -->
-    <div class="field">
-      <label>Valor total a apostar:</label>
-      <input type="number" id="valorTotal">
-    </div>
-
-    <!-- Multiplicadores -->
-    <div class="field">
-      <label>Multiplicador 2 acertos:</label>
-      <input type="number" id="mult2" value="1">
-      <label>Multiplicador 1 acerto:</label>
-      <input type="number" id="mult1" value="1">
-      <label>Multiplicador 0 acertos:</label>
-      <input type="number" id="mult0" value="1">
-    </div>
-
-    <!-- Número de apostas perdidas -->
-    <div class="field">
-      <label>Apostas vencidas:</label>
-      <input type="number" id="numVencidas" min="0" max="2" value="0">
-    </div>
-
-    <!-- Botões -->
-    <button onclick="calcularDistribuicao()">Calcular distribuição</button>
-    <button onclick="apostaConcluida()">Aposta concluída</button>
-
-    <!-- Resultados -->
-    <div class="resultado" id="resultado"></div>
-
-    <!-- Histórico -->
-    <table id="historico">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Data</th>
-          <th>Valor apostado</th>
-          <th>Lucro/Prejuízo</th>
-          <th>% sobre valor</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-
+<h1>MX$</h1>
+<div class="container">
+  <div>
+    <label>Saldo inicial: R$</label>
+    <input type="number" id="saldoInicial" value="0" step="0.01">
+    <label>Saldo atual: R$</label>
+    <span id="saldoAtual">0.00</span>
   </div>
 
+  <hr>
+
+  <div>
+    <input type="text" id="time1" placeholder="Time 1">
+    <input type="text" id="time2" placeholder="Time 2">
+  </div>
+
+  <div>
+    <input type="number" id="odd1" placeholder="Odd 1" step="0.01">
+    <input type="number" id="odd2" placeholder="Odd 2" step="0.01">
+  </div>
+
+  <div>
+    <input type="number" id="valorTotal" placeholder="Valor total apostado" step="0.01">
+    <button onclick="calcularDistribuicao()">Calcular distribuição</button>
+  </div>
+
+  <div id="resultado"></div>
+
+  <hr>
+
+  <div>
+    <label>Multiplicador (2 apostas vencedoras):</label>
+    <input type="number" id="multi2" value="1.0" step="0.01"><br>
+    <label>Multiplicador (1 aposta vencedora):</label>
+    <input type="number" id="multi1" value="1.0" step="0.01"><br>
+    <label>Multiplicador (0 apostas vencedoras):</label>
+    <input type="number" id="multi0" value="1.0" step="0.01"><br>
+    <label>Quantas apostas venceram (0,1,2):</label>
+    <input type="number" id="vitorias" value="0" min="0" max="2">
+  </div>
+
+  <button onclick="apostaConcluida()">Aposta concluída</button>
+  <button onclick="resetarHistorico()">🔄 Resetar histórico</button>
+
+  <h3>Histórico de apostas</h3>
+  <table id="historico">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Data</th>
+        <th>Valor Apostado (R$)</th>
+        <th>Lucro/Prejuízo (R$)</th>
+        <th>%</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
 <script>
-let historicoCount = 0;
+let numeroAposta = 0;
+let saldoAtual = 0;
 
-// Função para calcular distribuição proporcional
-function calcularDistribuicao() {
-  const valorTotal = parseFloat(document.getElementById('valorTotal').value);
-  const odd1 = parseFloat(document.getElementById('odd1').value);
-  const odd2 = parseFloat(document.getElementById('odd2').value);
-
-  if(isNaN(valorTotal) || isNaN(odd1) || isNaN(odd2) || odd1<=0 || odd2<=0) {
-    alert("Preencha todos os campos de odds e valor total corretamente.");
-    return;
+// --- Carregar dados salvos ---
+window.onload = () => {
+  const dados = JSON.parse(localStorage.getItem("mx_calc")) || {};
+  if (dados.saldoInicial) document.getElementById("saldoInicial").value = dados.saldoInicial;
+  if (dados.saldoAtual) {
+    saldoAtual = dados.saldoAtual;
+    document.getElementById("saldoAtual").textContent = (parseFloat(dados.saldoInicial) + saldoAtual).toFixed(2);
   }
+  if (dados.numeroAposta) numeroAposta = dados.numeroAposta;
+  if (dados.historico) {
+    document.querySelector("#historico tbody").innerHTML = dados.historico;
+  }
+};
 
-  // Fórmula distribuição proporcional
-  const somaInversos = (1/odd1) + (1/odd2);
-  const aposta1 = (valorTotal/odd1) / somaInversos;
-  const aposta2 = (valorTotal/odd2) / somaInversos;
-
-  // Retornos
-  const retorno1 = aposta1 * odd1;
-  const retorno2 = aposta2 * odd2;
-  const retornoTotal = valorTotal / somaInversos;
-
-  const perc1 = ((retorno1 - valorTotal)/valorTotal*100).toFixed(2);
-  const perc2 = ((retorno2 - valorTotal)/valorTotal*100).toFixed(2);
-
-  document.getElementById('resultado').innerHTML = `
-    <strong>Distribuição das apostas:</strong><br>
-    ${document.getElementById('time1').value || 'Time 1'}: R$ ${aposta1.toFixed(2)}<br>
-    ${document.getElementById('time2').value || 'Time 2'}: R$ ${aposta2.toFixed(2)}<br><br>
-    <strong>Retorno se acertar ambas:</strong> R$ ${(retornoTotal).toFixed(2)} (${((retornoTotal-valorTotal)/valorTotal*100).toFixed(2)}%)<br>
-    <strong>Retorno se acertar apenas uma:</strong><br>
-    ${document.getElementById('time1').value || 'Time 1'}: R$ ${retorno1.toFixed(2)} (${perc1}%)<br>
-    ${document.getElementById('time2').value || 'Time 2'}: R$ ${retorno2.toFixed(2)} (${perc2}%)
-  `;
-
-  // Armazenar para uso posterior
-  document.getElementById('resultado').dataset.aposta1 = aposta1;
-  document.getElementById('resultado').dataset.aposta2 = aposta2;
-  document.getElementById('resultado').dataset.valorTotal = valorTotal;
+// --- Salvar dados no localStorage ---
+function salvarDados() {
+  const dados = {
+    saldoInicial: parseFloat(document.getElementById("saldoInicial").value) || 0,
+    saldoAtual,
+    numeroAposta,
+    historico: document.querySelector("#historico tbody").innerHTML
+  };
+  localStorage.setItem("mx_calc", JSON.stringify(dados));
 }
 
-// Função para finalizar aposta e atualizar histórico
-function apostaConcluida() {
-  const numVencidas = parseInt(document.getElementById('numVencidas').value);
-  const valorTotal = parseFloat(document.getElementById('resultado').dataset.valorTotal || 0);
-  const mult2 = parseFloat(document.getElementById('mult2').value);
-  const mult1 = parseFloat(document.getElementById('mult1').value);
-  const mult0 = parseFloat(document.getElementById('mult0').value);
-  let lucro = 0;
+// --- Calcular distribuição proporcional ---
+function calcularDistribuicao() {
+  const odd1 = parseFloat(document.getElementById('odd1').value);
+  const odd2 = parseFloat(document.getElementById('odd2').value);
+  const total = parseFloat(document.getElementById('valorTotal').value);
 
-  if(isNaN(valorTotal) || valorTotal <=0) {
-    alert("Calcule a distribuição antes de concluir a aposta.");
+  if (isNaN(odd1) || isNaN(odd2) || isNaN(total)) {
+    alert("Preencha todos os campos corretamente.");
     return;
   }
 
-  if(numVencidas === 2) lucro = valorTotal * mult2;
-  else if(numVencidas === 1) lucro = valorTotal * mult1;
-  else lucro = valorTotal * mult0;
+  const stake1 = total / (1 + (odd1 / odd2));
+  const stake2 = total - stake1;
 
-  // Atualizar saldo atual
-  let saldoAtual = parseFloat(document.getElementById('saldoAtual').value);
+  const retornoAmbas = (stake1 * odd1 + stake2 * odd2) - total;
+  const retornoUma = Math.max(stake1 * odd1, stake2 * odd2) - total;
+
+  const resultado = `
+    <p><b>Aposta 1:</b> R$ ${stake1.toFixed(2)}</p>
+    <p><b>Aposta 2:</b> R$ ${stake2.toFixed(2)}</p>
+    <p><b>Se acertar ambas:</b> Retorno total R$ ${(stake1 * odd1 + stake2 * odd2).toFixed(2)} (Lucro: R$ ${retornoAmbas.toFixed(2)})</p>
+    <p><b>Se acertar apenas uma:</b> Retorno total R$ ${(Math.max(stake1 * odd1, stake2 * odd2)).toFixed(2)} (Lucro: R$ ${retornoUma.toFixed(2)})</p>
+  `;
+  document.getElementById('resultado').innerHTML = resultado;
+}
+
+// --- Concluir aposta ---
+function apostaConcluida() {
+  const saldoInicial = parseFloat(document.getElementById('saldoInicial').value);
+  const vitorias = parseInt(document.getElementById('vitorias').value);
+  const multi0 = parseFloat(document.getElementById('multi0').value);
+  const multi1 = parseFloat(document.getElementById('multi1').value);
+  const multi2 = parseFloat(document.getElementById('multi2').value);
+  const valorTotal = parseFloat(document.getElementById('valorTotal').value);
+
+  if (isNaN(valorTotal) || isNaN(saldoInicial)) {
+    alert("Preencha saldo inicial e valor total antes de concluir.");
+    return;
+  }
+
+  let multiplicador = 1;
+  if (vitorias === 0) multiplicador = multi0;
+  else if (vitorias === 1) multiplicador = multi1;
+  else if (vitorias === 2) multiplicador = multi2;
+
+  const retorno = valorTotal * multiplicador;
+  const lucro = retorno - valorTotal;
   saldoAtual += lucro;
-  document.getElementById('saldoAtual').value = saldoAtual.toFixed(2);
+  const novoSaldo = saldoInicial + saldoAtual;
+  document.getElementById('saldoAtual').textContent = novoSaldo.toFixed(2);
 
-  // Adicionar ao histórico
-  historicoCount++;
-  const tbody = document.getElementById('historico').querySelector('tbody');
-  const tr = document.createElement('tr');
-  tr.className = lucro >=0 ? 'ganho' : 'perda';
-  const hoje = new Date();
-  const dataStr = hoje.toLocaleDateString() + ' ' + hoje.toLocaleTimeString();
-  const perc = ((lucro/valorTotal)*100).toFixed(2);
-  tr.innerHTML = `
-    <td>${historicoCount}</td>
-    <td>${dataStr}</td>
-    <td>R$ ${valorTotal.toFixed(2)}</td>
-    <td>R$ ${lucro.toFixed(2)}</td>
+  numeroAposta++;
+  const data = new Date().toLocaleString('pt-BR');
+  const perc = ((lucro / valorTotal) * 100).toFixed(2);
+  const linha = document.createElement('tr');
+  linha.className = lucro >= 0 ? 'ganho' : 'perda';
+  linha.innerHTML = `
+    <td>${numeroAposta}</td>
+    <td>${data}</td>
+    <td>${valorTotal.toFixed(2)}</td>
+    <td>${lucro.toFixed(2)}</td>
     <td>${perc}%</td>
   `;
-  tbody.appendChild(tr);
+  document.querySelector('#historico tbody').appendChild(linha);
 
-  // Limpar campos de aposta
-  document.getElementById('time1').value = '';
-  document.getElementById('time2').value = '';
+  // Limpar campos exceto multiplicadores
   document.getElementById('odd1').value = '';
   document.getElementById('odd2').value = '';
   document.getElementById('valorTotal').value = '';
-  document.getElementById('numVencidas').value = 0;
   document.getElementById('resultado').innerHTML = '';
-  delete document.getElementById('resultado').dataset.aposta1;
-  delete document.getElementById('resultado').dataset.aposta2;
-  delete document.getElementById('resultado').dataset.valorTotal;
+  document.getElementById('time1').value = '';
+  document.getElementById('time2').value = '';
+
+  salvarDados();
+}
+
+// --- Resetar histórico ---
+function resetarHistorico() {
+  if (confirm("Tem certeza que deseja apagar todo o histórico e saldo atual?")) {
+    localStorage.removeItem("mx_calc");
+    location.reload();
+  }
 }
 </script>
+
 </body>
 </html>
